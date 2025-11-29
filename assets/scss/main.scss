@@ -1,0 +1,98 @@
+@use "sass:color";
+@forward "variables";
+@use "variables" as *;
+
+// Основные стили
+html {
+  scroll-behavior: smooth;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+  font-family: "TASA Explorer", sans-serif;
+  font-family: "Noto Sans", sans-serif;
+}
+
+.container {
+  max-width: 1600px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+
+// Секции
+.section {
+  padding: calc(40px + #{$header-height}) 0;
+  
+  &--hero {
+    background: linear-gradient(135deg, #50556d 0%, #2B675D 100%);
+    color: #95fcde;
+    color: #25edab;
+    color: #f9f5c5;
+    color: #95f5d3;
+    color: #a5ecc7;
+
+    background: linear-gradient(90deg, #116466,#025b67,#006666);
+    text-align: center;
+    min-height: 100vh;
+    display: flex;
+    padding-top: 150px;
+  }
+  
+  &--gallery {
+    background: $light-bg;
+  }
+  
+  &--map {
+    background: linear-gradient(135deg, #50556d 0%, #2B675D 100%);
+  }
+}
+
+.section-title {
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+  text-align: center;
+  color: $secondary-color;
+}
+
+// Кнопки
+// .btn {
+//   display: inline-block;
+//   padding: 1rem 2rem;
+//   background: $primary-color;
+//   color: white;
+//   text-decoration: none;
+//   border-radius: 5px;
+//   transition: all 0.3s;
+//   border: none;
+//   cursor: pointer;
+//   font-size: 1rem;
+  
+//   &:hover {
+//     background: color.adjust($primary-color, $lightness: -10%);
+//     transform: translateY(-2px);
+//   }
+// }
+
+// Адаптивность
+@media (max-width: 768px) {
+  .container {
+    padding: 0 0.5rem;
+  }
+  
+  .section-title {
+    font-size: 2rem;
+  }
+  
+  .nav {
+    flex-direction: column;
+    gap: 1rem;
+  }
+}

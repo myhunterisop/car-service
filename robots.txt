@@ -1,0 +1,6 @@
+export default defineNuxtConfig({
+  robots: {
+    UserAgent: '*',
+    Allow: '/'
+  }
+})
