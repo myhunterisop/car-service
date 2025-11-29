@@ -119,8 +119,6 @@ const photos = [
 </script>
 
 <style lang="scss" scoped>
-@use '~/assets/scss/variables' as *;
-
 .photo-gallery {
   margin: 2rem 0;
   width: 100%;

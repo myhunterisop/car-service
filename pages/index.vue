@@ -247,8 +247,6 @@ useHead({
 </script>
 
 <style scoped lang="scss">
-@use '~/assets/scss/variables' as *;
-
 .hero {
   background: #04070b;
   color: #f9f9f7;

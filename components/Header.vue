@@ -31,8 +31,6 @@ onMounted(() => {
 </script>
 
 <style lang="scss">
-@use '~/assets/scss/variables' as *;
-
 .header {
   background-color: #116466;
   background-color: #025b67;

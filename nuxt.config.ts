@@ -1,3 +1,5 @@
+import { defineNuxtConfig } from 'nuxt/config';
+
 export default defineNuxtConfig({
   devtools: { enabled: true },
   
@@ -7,14 +9,27 @@ export default defineNuxtConfig({
       yandexMapsApiKey: ''
     }
   },
-  
   modules: ['@pinia/nuxt', '@nuxtjs/sitemap', '@nuxt/image'],
   sitemap: {
     hostname: 'https://your-domain.com',
+    routes: [
+      '/',
+    ],
+    exclude: ['/admin/**', '/private/**'],
+    defaults: {
+      changefreq: 'weekly',
+      priority: 1.0,
+      lastmod: new Date().toISOString()
+    }
+  },
+  robots: {
+    UserAgent: '*',
+    Allow: '/',
+    Disallow: ['/admin', '/private'],
+    Sitemap: 'https://your-domain.com/sitemap.xml'
   },
   css: [
     '~/assets/scss/main.scss',
-    '~/assets/scss/_variables.scss',
   ],
   image: {
     // The screen sizes predefined by `@nuxt/image`:
@@ -45,9 +60,9 @@ export default defineNuxtConfig({
     css: {
       preprocessorOptions: {
         scss: {
-          api: 'modern-compiler'
+          additionalData: `@use '~/assets/scss/variables' as *;`
         }
       }
     }
   }
-})
+} as any)

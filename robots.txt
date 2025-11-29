@@ -1,6 +1,7 @@
-export default defineNuxtConfig({
-  robots: {
-    UserAgent: '*',
-    Allow: '/'
-  }
-})
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /private
+
+# Sitemap
+Sitemap: https://your-domain.com/sitemap.xml
