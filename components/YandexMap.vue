@@ -39,19 +39,41 @@
 import { ref, onMounted } from 'vue'
 
 const mapContainer = ref(null)
+const runtimeConfig = useRuntimeConfig()
 
 // Координаты автосервиса
 const coordinates = [59.965100, 30.467661]
 
 onMounted(() => {
-  // Проверяем доступность Yandex Maps API
+  loadYandexMapsScript()
+})
+
+const loadYandexMapsScript = () => {
+  const apiKey = runtimeConfig.public.yandexMapsApiKey
+  
+  if (!apiKey) {
+    console.error('Yandex Maps API key is not configured. Please add NUXT_PUBLIC_YANDEX_MAPS_API_KEY to your .env file')
+    return
+  }
+
+  // Проверяем, загружен ли скрипт уже
   if (typeof window !== 'undefined' && window.ymaps) {
     initMap()
-  } else {
-    // Если API еще не загружен, ждем его загрузки
-    window.ymapsReady = initMap
+    return
   }
-})
+
+  // Загружаем скрипт Yandex Maps
+  const script = document.createElement('script')
+  script.src = `https://api-maps.yandex.ru/2.1/?apikey=${apiKey}&lang=ru_RU`
+  script.type = 'text/javascript'
+  script.async = true
+  script.onload = () => {
+    if (window.ymaps) {
+      initMap()
+    }
+  }
+  document.head.appendChild(script)
+}
 
 const initMap = () => {
   window.ymaps.ready(() => {

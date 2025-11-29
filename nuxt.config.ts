@@ -1,6 +1,13 @@
 export default defineNuxtConfig({
   devtools: { enabled: true },
   
+  runtimeConfig: {
+    public: {
+      // Значение подтягивается из .env переменной NUXT_PUBLIC_YANDEX_MAPS_API_KEY
+      yandexMapsApiKey: ''
+    }
+  },
+  
   modules: ['@pinia/nuxt', '@nuxtjs/sitemap', '@nuxt/image'],
   sitemap: {
     hostname: 'https://your-domain.com',
@@ -30,12 +37,7 @@ export default defineNuxtConfig({
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
         { name: 'description', content: 'Профессиональный автосервис с полным спектром услуг по ремонту и обслуживанию автомобилей' }
       ],
-      script: [
-        {
-          src: 'https://api-maps.yandex.ru/2.1/?lang=ru_RU',
-          type: 'text/javascript'
-        }
-      ]
+      script: []
     }
   },
   
