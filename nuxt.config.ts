@@ -53,7 +53,8 @@ export default defineNuxtConfig({
         { name: 'description', content: 'Профессиональный автосервис с полным спектром услуг по ремонту и обслуживанию автомобилей' }
       ],
       script: []
-    }
+    },
+    baseURL: '/docs/',
   },
   
   vite: {
