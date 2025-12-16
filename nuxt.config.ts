@@ -48,16 +48,21 @@ export default defineNuxtConfig({
       title: 'Автосервис - Профессиональный ремонт автомобилей',
       meta: [
         { charset: 'utf-8' },
-        { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+        { name: 'viewport', content: 'width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1' },
         { name: 'description', content: 'Профессиональный автосервис с полным спектром услуг по ремонту и обслуживанию автомобилей' }
       ],
       script: []
     },
-    baseURL: '/auto-service/',
-    buildAssetsDir: 'assets',
+    baseURL: process.env.NODE_ENV === 'production' ? '/auto-service/' : '/',
   },
   
+  nitro: {
+    compatibilityDate: '2025-12-16'
+  },
   vite: {
+    server: {
+      hmr: { port: 0 }
+    },
     css: {
       preprocessorOptions: {
         scss: {

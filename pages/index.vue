@@ -1,6 +1,6 @@
 <template>
   <div>
-    <section id="hero" ref="heroSection" class="section section--hero hero">
+    <section id="hero" class="section section--hero hero">
       <div class="hero__inner">
         <div class="hero__text">
           <p class="hero__eyebrow">Премиальный сервис</p>
@@ -20,26 +20,27 @@
         <div
           class="hero-drag"
           ref="dragSurface"
-          @pointerup="onPointerUp"
-          @pointerleave="onPointerUp"
         >
           <div class="hero-drag__track" ref="dragTrack">
-            <article
-              v-for="(card, index) in heroGallery"
-              :key="card.id"
-              class="hero-card"
-              :style="{ backgroundImage: `url(${card.src})` }"
-            >
-              <div class="hero-card__overlay">
-                <p class="hero-card__label">{{ card.label }}</p>
-                <h2>{{ card.title }}</h2>
-                <span>{{ card.meta }}</span>
-              </div>
-              <span class="hero-card__index">0{{ index + 1 }}</span>
-            </article>
+            <div class="hero-drag__slides">
+              <article
+                v-for="(card, index) in heroGallery"
+                :key="card.id"
+                class="hero-card"
+                :style="{ backgroundImage: `url(${card.src})` }"
+              >
+                <div class="hero-card__overlay">
+                  <p class="hero-card__label">{{ card.label }}</p>
+                  <h2>{{ card.title }}</h2>
+                  <span>{{ card.meta }}</span>
+                </div>
+                <span class="hero-card__index">0{{ index + 1 }}</span>
+              </article>
+            </div>
           </div>
-          <div class="hero-drag__indicator">
-            <span>Прокрутите вниз</span>
+
+          <div class="hero-drag__indicator" role="status" aria-label="Инструкция по прокрутке">
+            <span>Листайте вбок</span>
             <span class="hero-drag__dot"></span>
           </div>
         </div>
@@ -51,9 +52,6 @@
       </div>
     </section>
 
-    <!-- <section id="hero" class="section section--hero">
-      412421
-    </section> -->
 
     <section id="gallery" class="section section--gallery">
       <div class="container">
@@ -77,16 +75,20 @@
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from 'vue'
 
-const heroSection = ref(null)
 const dragSurface = ref(null)
 const dragTrack = ref(null)
 
-const dragging = ref(false)
-// let pointerStartX = 0
-// let pointerStartProgress = 0
-let scrollTriggerInstance = null
-let ctx = null
-let ScrollTriggerRef = null
+// drag-to-scroll state
+let isDragging = false
+let dragStartX = 0
+let dragStartScroll = 0
+
+// momentum state
+let momentumId = null
+let lastVel = 0
+let prevScroll = 0
+let prevTime = 0
+let lastTimestamp = null
 
 const heroGallery = [
   {
@@ -133,105 +135,112 @@ const heroGallery = [
   }
 ]
 
+
+
 // const clamp = (value, min = 0, max = 1) => Math.min(max, Math.max(min, value))
 
-const handleResize = () => {
-  scrollTriggerInstance?.refresh()
-}
 
-onMounted(async () => {
-  if (!heroSection.value) {
-    return
+onMounted(() => {
+  if (!dragTrack.value || !dragSurface.value) return
+
+  // pointer drag handlers
+  const onPointerDown = (e) => {
+    // cancel momentum if active
+    if (momentumId) {
+      cancelAnimationFrame(momentumId)
+      momentumId = null
+    }
+
+    isDragging = true
+    dragStartX = e.clientX
+    dragStartScroll = dragTrack.value.scrollLeft
+    dragSurface.value.classList.add('dragging')
+
+    // init velocity tracking
+    prevScroll = dragTrack.value.scrollLeft
+    prevTime = performance.now()
+    lastVel = 0
+
+    dragTrack.value.setPointerCapture?.(e.pointerId)
   }
 
-  const gsap = (await import('gsap')).default
-  const { ScrollTrigger } = await import('gsap/ScrollTrigger')
-  gsap.registerPlugin(ScrollTrigger)
-  ScrollTriggerRef = ScrollTrigger
+  const onPointerMove = (e) => {
+    if (!isDragging) return
+    const dx = e.clientX - dragStartX
+    dragTrack.value.scrollLeft = dragStartScroll - dx
 
-  ctx = gsap.context(() => {
-    const trackTween = gsap.to(dragTrack.value, {
-      x: () => {
-        const surface = dragSurface.value
-        const track = dragTrack.value
-        if (!surface || !track) {
-          return 0
+    // velocity estimation (pixels per ms)
+    const now = performance.now()
+    const dt = now - prevTime
+    if (dt > 0) {
+      lastVel = (dragTrack.value.scrollLeft - prevScroll) / dt
+      prevScroll = dragTrack.value.scrollLeft
+      prevTime = now
+    }
+
+    e.preventDefault()
+  }
+
+  const onPointerUp = (e) => {
+    if (!isDragging) return
+    isDragging = false
+    dragSurface.value.classList.remove('dragging')
+    dragTrack.value.releasePointerCapture?.(e.pointerId)
+
+    // start momentum if velocity is significant
+    const threshold = 0.02 // px per ms
+    if (Math.abs(lastVel) > threshold) {
+      lastTimestamp = null
+      const friction = 0.005 // friction coefficient, tweakable
+
+      const step = (ts) => {
+        if (!lastTimestamp) lastTimestamp = ts
+        const dt = ts - lastTimestamp
+        lastTimestamp = ts
+
+        // update scroll
+        dragTrack.value.scrollLeft += lastVel * dt
+
+        // apply exponential decay
+        lastVel = lastVel * Math.exp(-friction * dt)
+
+        // stop if velocity very small or reached edges
+        const maxScroll = dragTrack.value.scrollWidth - dragTrack.value.clientWidth
+        if (Math.abs(lastVel) < 0.01 || dragTrack.value.scrollLeft <= 0 && lastVel < 0 || dragTrack.value.scrollLeft >= maxScroll && lastVel > 0) {
+          momentumId = null
+          return
         }
-        const distance = track.scrollWidth - surface.offsetWidth
-        return distance > 0 ? -distance : 0
-      },
-      ease: 'none'
-    })
 
-    scrollTriggerInstance = ScrollTrigger.create({
-      trigger: heroSection.value,
-      start: 'top top',
-      end: '+=220%',
-      pin: true,
-      scrub: true,
-      animation: trackTween,
-      anticipatePin: 1
-    })
+        momentumId = requestAnimationFrame(step)
+      }
 
-    gsap
-      .timeline({
-        scrollTrigger: {
-          trigger: heroSection.value,
-          start: 'top top',
-          end: '+=60%',
-          scrub: true
-        }
-      })
-      .from('.hero__eyebrow', { yPercent: 60, opacity: 0 }, 0)
-      .from('.hero__text h1', { yPercent: 35, opacity: 0 }, 0.1)
-      .from('.hero__lead', { yPercent: 25, opacity: 0 }, 0.2)
-      .from('.hero__cta', { yPercent: 20, opacity: 0 }, 0.3)
+      momentumId = requestAnimationFrame(step)
+    }
+  }
 
-    ScrollTrigger.addEventListener('refreshInit', handleResize)
-  }, heroSection)
+  dragTrack.value.addEventListener('pointerdown', onPointerDown, { passive: true })
+  window.addEventListener('pointermove', onPointerMove)
+  window.addEventListener('pointerup', onPointerUp)
+  window.addEventListener('pointercancel', onPointerUp)
+
+  dragTrack.value._onPointerDown = onPointerDown
+  dragTrack.value._onPointerMove = onPointerMove
+  dragTrack.value._onPointerUp = onPointerUp
 })
 
 onBeforeUnmount(() => {
-  ScrollTriggerRef?.removeEventListener('refreshInit', handleResize)
-  scrollTriggerInstance?.kill()
-  ctx?.revert()
+  // cleanup pointer handlers
+  const down = dragTrack.value?._onPointerDown
+  const move = dragTrack.value?._onPointerMove
+  const up = dragTrack.value?._onPointerUp
+  if (down) dragTrack.value.removeEventListener('pointerdown', down)
+  if (move) window.removeEventListener('pointermove', move)
+  if (up) {
+    window.removeEventListener('pointerup', up)
+    window.removeEventListener('pointercancel', up)
+  }
 })
 
-const moveToProgress = (progress) => {
-  if (!scrollTriggerInstance) {
-    return
-  }
-  const distance = scrollTriggerInstance.end - scrollTriggerInstance.start
-  const scrollPos = scrollTriggerInstance.start + progress * distance
-  scrollTriggerInstance.scroll(scrollPos)
-}
-
-// const onPointerDown = (event) => {
-//   if (!scrollTriggerInstance) {
-//     return
-//   }
-//   dragging.value = true
-//   pointerStartX = event.clientX
-//   pointerStartProgress = scrollTriggerInstance.progress
-//   dragSurface.value?.setPointerCapture?.(event.pointerId)
-// }
-
-// const onPointerMove = (event) => {
-//   if (!dragging.value || !scrollTriggerInstance) {
-//     return
-//   }
-//   const delta = (pointerStartX - event.clientX) / window.innerWidth
-//   const nextProgress = clamp(pointerStartProgress + delta * 1.5)
-//   moveToProgress(nextProgress)
-// }
-
-const onPointerUp = (event) => {
-  if (!dragging.value) {
-    return
-  }
-  dragging.value = false
-  dragSurface.value?.releasePointerCapture?.(event.pointerId)
-}
 
 useHead({
   title: 'АвтоСервис - Профессиональный ремонт автомобилей',
@@ -339,15 +348,24 @@ useHead({
   // cursor: grab;
   user-select: none;
 
-  &:active {
-    // cursor: grabbing;
-  }
 
   &__track {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    transform: translateZ(0);
+    touch-action: pan-y;
+    cursor: grab;
+  }
+
+  .hero-drag.dragging {
+    cursor: grabbing;
+    user-select: none;
+  }
+
+  &__slides {
     display: flex;
     gap: clamp(20px, 3vw, 40px);
     padding: clamp(30px, 4vw, 60px);
-    transform: translateZ(0);
   }
 
   &__indicator {
@@ -403,7 +421,8 @@ useHead({
   justify-content: space-between;
   padding: 1.5rem;
   color: #fff;
-  pointer-events: none;
+  pointer-events: auto;
+
 
 
   &::after {

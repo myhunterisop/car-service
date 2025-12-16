@@ -72,6 +72,7 @@ const initMap = () => {
   const map = new window.ymaps.Map(mapContainer.value, {
     center: coordinates,
     zoom: 15,
+    // controls: ['zoomControl', 'fullscreenControl', 'geolocationControl']
   })
 
   const placemark = new window.ymaps.Placemark(coordinates, {
