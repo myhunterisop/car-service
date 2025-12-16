@@ -55,7 +55,7 @@ export default defineNuxtConfig({
       script: []
     },
     baseURL: '/nuxt-github-pages/',
-    buildAssetsDir: 'assets',
+    buildAssetsDir: '/assets',
   },
   
   vite: {
