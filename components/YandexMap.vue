@@ -28,7 +28,7 @@
     </div>
   
     <div 
-      id="yandex-map" 
+      id="yandex-map"
       class="yandex-map map-container__map"
       ref="mapContainer"
     ></div>
@@ -39,6 +39,7 @@
 import { ref, onMounted } from 'vue'
 
 const mapContainer = ref(null)
+
 const runtimeConfig = useRuntimeConfig()
 
 // Координаты автосервиса
@@ -50,58 +51,111 @@ onMounted(() => {
 
 const loadYandexMapsScript = () => {
   const apiKey = runtimeConfig.public.yandexMapsApiKey
-  
-  if (!apiKey) {
-    console.error('Yandex Maps API key is not configured. Please add NUXT_PUBLIC_YANDEX_MAPS_API_KEY to your .env file')
-    return
-  }
+  if (!apiKey) return
 
-  // Проверяем, загружен ли скрипт уже
-  if (typeof window !== 'undefined' && window.ymaps) {
+  if (window.ymaps) {
     initMap()
     return
   }
 
-  // Загружаем скрипт Yandex Maps
+  if (document.getElementById('yandex-maps-script')) return
+
   const script = document.createElement('script')
+  script.id = 'yandex-maps-script'
   script.src = `https://api-maps.yandex.ru/2.1/?apikey=${apiKey}&lang=ru_RU`
-  script.type = 'text/javascript'
-  script.async = true
-  script.onload = () => {
-    if (window.ymaps) {
-      initMap()
-    }
-  }
+  script.onload = () => window.ymaps.ready(initMap)
+
   document.head.appendChild(script)
 }
 
 const initMap = () => {
-  window.ymaps.ready(() => {
-    const map = new window.ymaps.Map('yandex-map', {
-      center: coordinates,
-      zoom: 15,
-      controls: ['zoomControl', 'fullscreenControl', 'geolocationControl']
-    })
-
-    // Добавляем метку автосервиса
-    const placemark = new window.ymaps.Placemark(coordinates, {
-      balloonContentHeader: 'АвтоСервис',
-      balloonContentBody: 'Профессиональный ремонт автомобилей<br><strong>Адрес:</strong> г. Санкт-Петербург, ул. Химиков, 2 ст2 ',
-      balloonContentFooter: 'Телефон: +7 (495) 123-45-67',
-      hintContent: 'АвтоСервис - Профессиональный ремонт'
-    }, {
-      iconLayout: 'default#image',
-      iconImageHref: '/images/map-marker.png',
-      iconImageSize: [40, 40],
-      iconImageOffset: [-20, -40]
-    })
-
-    map.geoObjects.add(placemark)
-
-    // Отключаем скролл карты колесиком мыши
-    // map.behaviors.disable('scrollZoom')
+  const map = new window.ymaps.Map(mapContainer.value, {
+    center: coordinates,
+    zoom: 15,
   })
+
+  const placemark = new window.ymaps.Placemark(coordinates, {
+    balloonContentHeader: 'АвтоСервис',
+    balloonContentBody: 'Профессиональный ремонт автомобилей<br><strong>Адрес:</strong> г. Санкт-Петербург, ул. Химиков, 2 ст2 ',
+    balloonContentFooter: 'Телефон: +7 (495) 123-45-67',
+    hintContent: 'АвтоСервис - Профессиональный ремонт'
+  }, {
+    iconLayout: 'default#image',
+    iconImageHref: '/images/map-marker.png',
+    iconImageSize: [40, 40],
+    iconImageOffset: [-20, -40]
+  })
+
+  map.geoObjects.add(placemark)
+
+  // Отключаем скролл карты колесиком мыши
+  map.behaviors.disable('scrollZoom')
 }
+
+// const mapContainer = ref(null)
+// const runtimeConfig = useRuntimeConfig()
+
+// // Координаты автосервиса
+// const coordinates = [59.965100, 30.467661]
+
+// onMounted(() => {
+//   loadYandexMapsScript()
+// })
+
+// const loadYandexMapsScript = () => {
+//   const apiKey = runtimeConfig.public.yandexMapsApiKey
+  
+//   if (!apiKey) {
+//     console.error('Yandex Maps API key is not configured. Please add NUXT_PUBLIC_YANDEX_MAPS_API_KEY to your .env file')
+//     return
+//   }
+
+//   // Проверяем, загружен ли скрипт уже
+//   if (typeof window !== 'undefined' && window.ymaps) {
+//     initMap()
+//     return
+//   }
+
+//   // Загружаем скрипт Yandex Maps
+//   const script = document.createElement('script')
+//   script.src = `https://api-maps.yandex.ru/2.1/?apikey=${apiKey}&lang=ru_RU`
+//   script.type = 'text/javascript'
+//   script.async = true
+//   script.onload = () => {
+//     if (window.ymaps) {
+//       initMap()
+//     }
+//   }
+//   document.head.appendChild(script)
+// }
+
+// const initMap = () => {
+//   window.ymaps.ready(() => {
+//     const map = new window.ymaps.Map('yandex-map', {
+//       center: coordinates,
+//       zoom: 15,
+//       controls: ['zoomControl', 'fullscreenControl', 'geolocationControl']
+//     })
+
+//     // Добавляем метку автосервиса
+//     const placemark = new window.ymaps.Placemark(coordinates, {
+//       balloonContentHeader: 'АвтоСервис',
+//       balloonContentBody: 'Профессиональный ремонт автомобилей<br><strong>Адрес:</strong> г. Санкт-Петербург, ул. Химиков, 2 ст2 ',
+//       balloonContentFooter: 'Телефон: +7 (495) 123-45-67',
+//       hintContent: 'АвтоСервис - Профессиональный ремонт'
+//     }, {
+//       iconLayout: 'default#image',
+//       iconImageHref: '/images/map-marker.png',
+//       iconImageSize: [40, 40],
+//       iconImageOffset: [-20, -40]
+//     })
+
+//     map.geoObjects.add(placemark)
+
+//     // Отключаем скролл карты колесиком мыши
+//     // map.behaviors.disable('scrollZoom')
+//   })
+// }
 </script>
 
 <style lang="scss" scoped>

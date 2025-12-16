@@ -42,7 +42,7 @@
             :alt="photo.alt"
             class="gallery__image"
             loading="lazy"
-            quality="20"
+            quality="80"
             format="webp"
             width="260"
             height="195"

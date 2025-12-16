@@ -66,7 +66,9 @@
     <section id="contacts" class="section section--map">
       <div class="container">
         <h2 class="section-title">Как нас найти</h2>
-        <YandexMap />
+        <ClientOnly>
+          <YandexMap />
+        </ClientOnly>
       </div>
     </section>
   </div>

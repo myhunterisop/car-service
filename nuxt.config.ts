@@ -5,7 +5,6 @@ export default defineNuxtConfig({
   
   runtimeConfig: {
     public: {
-      // Значение подтягивается из .env переменной NUXT_PUBLIC_YANDEX_MAPS_API_KEY
       yandexMapsApiKey: ''
     }
   },
