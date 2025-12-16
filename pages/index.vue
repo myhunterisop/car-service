@@ -264,15 +264,13 @@ useHead({
   min-height: 100vh;
   display: flex;
   align-items: stretch;
-  padding: 0;
+  // padding: 0;
 
   &__inner {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: clamp(40px, 6vw, 120px);
     width: 100%;
-    padding: 80px;
-    padding-top: calc($header-height + 50px);
   }
 
   &__text {
@@ -483,10 +481,10 @@ useHead({
   .hero {
     min-height: auto;
 
-    &__inner {
-      padding: 40px 20px;
-      gap: 32px;
-    }
+    // &__inner {
+    //   padding: 40px 20px;
+    //   gap: 32px;
+    // }
   }
 
   .hero-drag {

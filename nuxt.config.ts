@@ -2,13 +2,21 @@ import { defineNuxtConfig } from 'nuxt/config';
 
 export default defineNuxtConfig({
   devtools: { enabled: true },
-  
   runtimeConfig: {
     public: {
       yandexMapsApiKey: ''
     }
   },
-  modules: ['@pinia/nuxt', '@nuxtjs/sitemap', '@nuxt/image'],
+  modules: ['@pinia/nuxt', '@nuxtjs/sitemap', '@nuxt/image', '@nuxtjs/google-fonts'],
+  googleFonts: {
+    families: {
+      // Roboto: true, // Downloads all styles
+      // Lato: [100, 300, 400, 700], // Specific weights
+      // Raleway: { wght: [100, 400], ital: [100] }, // Advanced config
+    },
+    // display: 'swap', // Optional: for better performance
+    download: true, // Optional: download fonts locally
+  },
   sitemap: {
     hostname: 'https://your-domain.com',
     routes: [
@@ -49,13 +57,13 @@ export default defineNuxtConfig({
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1' },
-        { name: 'description', content: 'Профессиональный автосервис с полным спектром услуг по ремонту и обслуживанию автомобилей' }
+        { name: 'description', content: 'Профессиональный автосервис c полным спектром услуг по ремонту и обслуживанию автомобилей' }
       ],
       script: []
     },
-    baseURL: process.env.NODE_ENV === 'production' ? '/auto-service/' : '/',
+    // baseURL: process.env.NODE_ENV === 'production' ? '/auto-service/' : '/',
+    baseURL: '/'
   },
-  
   nitro: {
     compatibilityDate: '2025-12-16'
   },

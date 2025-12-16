@@ -4,7 +4,6 @@
       <li
         v-for="(item, index) in data"
         :key="index"
-        class="navigation__item"
       >
         <a
           @click.prevent="onClick(item.link)"
@@ -50,24 +49,28 @@ function onClick(hash) {
 @use 'sass:color';
 
 .navigation {
-  margin-left: auto;
-
   &__list {
     display: flex;
-    column-gap: 20px;
-  }
+    column-gap: $gutter * 2;
 
-  &__item {
-    list-style-type: none;
+    @media (max-width: $tablet) {
+      justify-content: space-evenly;
+    }
   }
   
   &__link {
-    color: #a5ecc7;
-    text-decoration: none;
-    transition: color 0.3s;
+    font-size: $font-size;
+    color: $navigation-color;
+    transition: color 0.3s ease-in-out;
+    // text-wrap: balance;
+    user-select: none;
+
     
     &:hover {
-      color: color.adjust(#a5ecc7, $lightness: -20%);
+      // padding: $gutter;
+      // border: 1px solid red;
+      // border-radius: 50%;
+      color: color.adjust($navigation-color, $lightness: 60%);
     }
   }
 }

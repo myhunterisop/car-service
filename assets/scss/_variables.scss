@@ -1,6 +1,15 @@
 // Sass переменные для использования в компонентах
 $primary-color: #ff6b35;
 $secondary-color: #1a1a1a;
+$navigation-color: #22d1ad;
+// $navigation-color: #a5ecc7;
 $text-color: #333;
 $light-bg: #f8f9fa;
 $header-height: 80px;
+$gutter: 10px;
+$font-size: 16px;
+
+//breakpoints
+$mobile: 479px;
+$tablet: 767px;
+$tablet-horizontal: 1199px;
