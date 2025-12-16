@@ -241,8 +241,8 @@ useHead({
       content:
         'Профессиональный автосервис с полным спектром услуг по ремонту и обслуживанию автомобилей'
     },
-    { property: 'og:title', content: 'Автосервис' },
-    { property: 'og:description', content: 'Описание для соцсетей' },
+    { property: 'og:title', content: 'Автосервис у Васи на Химиков' },
+    { property: 'og:description', content: 'Саня Пантюхин - внатури чоткий механ!' },
     { property: 'og:image', content: '/images/preview.jpg' }
   ]
 })
