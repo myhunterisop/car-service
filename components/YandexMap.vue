@@ -19,6 +19,18 @@
           <strong>Телефон:</strong> +7 (999) 123-LIVE (LIVE RELOAD РАБОТАЕТ!)
         </div>
         <div class="contact-item">
+          <NuxtLink to="https://t.me/+79110381838" target="_blank" rel="noopener noreferrer" class="contact-item__tg">
+            <img src="/images/telegram-logo_2.svg" />
+            Telegram
+          </NuxtLink>
+        </div>
+        <div class="contact-item">
+          <NuxtLink to="https://t.me/kenatiprox" target="_blank" rel="noopener noreferrer" class="contact-item__tg">
+            <img src="/images/telegram-logo_2.svg" />
+            Telegram
+          </NuxtLink>
+        </div>
+        <div class="contact-item">
           <strong>Режим работы:</strong> 10:00 - 20:00 ежедневно
         </div>
         <div class="contact-item">
@@ -195,6 +207,7 @@ const initMap = () => {
 }
 
 .contact-item {
+  
   margin-bottom: 1rem;
   line-height: 1.6;
   
@@ -202,6 +215,17 @@ const initMap = () => {
     color: black;
     display: inline-block;
     min-width: 120px;
+  }
+
+  &__tg {
+    display: flex;
+    align-items: center;
+
+    img {
+      margin-right: $gutter;
+      width: 25px;
+      height: 25px;
+    }
   }
 }
 
