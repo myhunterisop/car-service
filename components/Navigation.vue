@@ -9,6 +9,8 @@
           @click.prevent="onClick(item.link)"
           :href="item.link"
           class="navigation__link"
+          :class="{ 'is-active': activeHash === item.link }"
+          :aria-current="activeHash === item.link ? 'page' : undefined"
         >
           {{ item.name }}
         </a>
@@ -18,6 +20,13 @@
 </template>
 
 <script setup>
+import { ref, onMounted, watch } from 'vue'
+
+const activeHash = ref(null)
+const HEADER_OFFSET = 80 // высота фиксированного хедера в px
+let observer = null
+let isProgrammaticScroll = false
+
 const data = [
   {
     name: 'Главная',
@@ -34,15 +43,66 @@ const data = [
 ]
 
 function onClick(hash) {
-  if (typeof window === 'undefined') {
-    return
-  }
-
   const target = document.querySelector(hash)
-  if (target) {
-    target.scrollIntoView({ behavior: 'smooth', block: 'start' })
-  }
+  if (!target) return
+
+  isProgrammaticScroll = true
+
+  const top =
+    target.getBoundingClientRect().top +
+    window.scrollY -
+    HEADER_OFFSET
+
+  window.scrollTo({
+    top,
+    behavior: 'smooth'
+  })
+
+  activeHash.value = hash
+
+  // даём скроллу закончиться
+  setTimeout(() => {
+    isProgrammaticScroll = false
+  }, 500)
 }
+
+onMounted(() => {
+  observer = new IntersectionObserver(
+    (entries) => {
+      if (isProgrammaticScroll) return
+
+      const visible = entries
+        .filter(e => e.isIntersecting)
+        .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0]
+
+      if (visible) {
+        activeHash.value = `#${visible.target.id}`
+      }
+    },
+    {
+      root: null,
+      threshold: [0.4, 0.6],
+      rootMargin: `-${HEADER_OFFSET}px 0px 0px 0px`
+    }
+  )
+
+  data.forEach(item => {
+    const section = document.querySelector(item.link)
+    if (section) observer.observe(section)
+  })
+
+  // ⬇️ синхронизация при прямом заходе по URL
+  if (location.hash) {
+    setTimeout(() => onClick(location.hash), 0)
+  }
+})
+
+watch(activeHash, (hash) => {
+  if (!hash) return
+
+  history.replaceState(null, '', hash)
+})
+
 </script>
 
 <style scoped lang="scss">
@@ -65,13 +125,26 @@ function onClick(hash) {
     // text-wrap: balance;
     user-select: none;
 
-    
-    &:hover {
-      // padding: $gutter;
-      // border: 1px solid red;
-      // border-radius: 50%;
+    &[aria-current="page"] {
       color: color.adjust($navigation-color, $lightness: 60%);
     }
+
+    
+    // &:hover,
+    // &.is-active {
+    //   // padding: $gutter;
+    //   // border: 1px solid red;
+    //   // border-radius: 50%;
+    //   color: color.adjust($navigation-color, $lightness: 60%);
+    // }
+
+    // &.is-active {
+    //   color: color.adjust($navigation-color, $lightness: 60%);
+    // }
+
+    // &:not(.is-active):hover {
+    //   color: color.adjust($navigation-color, $lightness: 60%);
+    // }
   }
 }
 </style>
