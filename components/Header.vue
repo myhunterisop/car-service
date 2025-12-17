@@ -6,13 +6,16 @@
     <div class="header__content container">
       <h1 class="logo">АвтоСервис</h1>
       <Navigation class="header__navigation"/>
-      <ThemeSwitcher class="header__theme-switcher" />
+      <ThemeSwitcher class="header__theme-switcher" v-model="themeStore.isChecked" />
     </div>
   </header>
 </template>
 
 <script setup>
 import { onMounted, ref } from 'vue';
+
+import { useThemeStore } from '@/stores/theme'
+const themeStore = useThemeStore()
 
 const isScrolled = ref(true);
 

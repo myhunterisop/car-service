@@ -16,6 +16,17 @@ import { onMounted, ref } from 'vue';
 
 const isChecked = ref(false);
 
+// defineProps = {
+//   isChecked: {
+//     type: Boolean,
+//     default: false,
+//   }
+// }
+
+// defineProps<{
+//   isChecked: boolean
+// }>
+
 function getTime() {
   const date = new Date();
   const clientLocalTime = date.toLocaleTimeString();
@@ -71,6 +82,10 @@ onMounted(() => {
       &:before {
         left: 23px;
       }
+    }
+
+    .main {
+      background: red;
     }
   }
 }

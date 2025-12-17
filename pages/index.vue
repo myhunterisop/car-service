@@ -1,6 +1,7 @@
 <template>
   <div>
     <section id="hero" class="section section--hero hero">
+      <img src="/images/123.jpg" class="sanya" v-if="themeStore.isChecked" />
       <div class="hero__inner">
         <div class="hero__text">
           <p class="hero__eyebrow">Премиальный сервис</p>
@@ -74,6 +75,8 @@
 
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from 'vue'
+import { useThemeStore } from '@/stores/theme'
+const themeStore = useThemeStore()
 
 const dragSurface = ref(null)
 const dragTrack = ref(null)
@@ -250,14 +253,40 @@ useHead({
       content:
         'Профессиональный автосервис с полным спектром услуг по ремонту и обслуживанию автомобилей'
     },
-    { property: 'og:title', content: 'Автосервис у Васи на Химиков' },
-    { property: 'og:description', content: 'Саня Пантюхин - внатури чоткий механ!' },
+    { property: 'og:title', content: 'Такой вот Автосервис у Васи на Химиков :)' },
+    { property: 'og:description', content: 'Саня Пантюхин - внатури чоткий пацан!' },
     { property: 'og:image', content: '/images/preview.jpg' }
   ]
 })
 </script>
 
 <style scoped lang="scss">
+.sanya {
+  position: absolute;
+  width: 100vw;
+  z-index: 10;
+  height: 100%;
+  animation-name: rotation;
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg) scale(1) translate3d(-2.7rem, 0, 1rem);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+    transform: scale(2) translate3d(5ch, 0.4in, 5em);
+  }
+  100% {
+    opacity: 0;
+    transform: rotate(360deg) scale(20);
+  }
+}
+
 .hero {
   background: #04070b;
   color: #f9f9f7;
