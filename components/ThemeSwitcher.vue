@@ -2,7 +2,8 @@
   <input
     type="checkbox"
     name="theme-switcher"
-    v-model="isChecked"
+    v-model="themeStore.isChecked"
+    @change="themeStore.allowSound()"
     aria-label="Переключатель темы"
     :class="[
       'theme-switcher',
@@ -14,6 +15,9 @@
 <script setup>
 // import { onMounted, ref } from 'vue';
 import { ref } from 'vue';
+import { useThemeStore } from '@/stores/theme'
+
+const themeStore = useThemeStore()
 
 const isChecked = ref(false);
 
