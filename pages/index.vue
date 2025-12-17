@@ -2,7 +2,7 @@
   <div>
     <section id="hero" class="section section--hero hero">
       <img src="/images/123.jpg" class="sanya" v-if="themeStore.isChecked" />
-      <audio loop ref="audioElement">
+      <audio autoplay loop ref="audioElement">
         <source src="/fisting.mp3" type="audio/mpeg">
       </audio>
       <div class="hero__inner">
@@ -142,17 +142,21 @@ const heroGallery = [
 ]
 
 const audioElement = ref(null)
-const soundAllowed = ref(false)
 
 watch(
   () => themeStore.isChecked,
   async (isChecked) => {
     if (!audioElement.value) return
-    if (!themeStore.soundAllowed) return
 
     if (isChecked) {
       audioElement.value.volume = 1
-      await audioElement.value.play()
+
+      try {
+        await audioElement.value.play()
+      } catch (e) {
+        // autoplay был заблокирован — это нормально
+        console.warn('Audio play blocked by browser')
+      }
     } else {
       audioElement.value.pause()
       audioElement.value.currentTime = 0
