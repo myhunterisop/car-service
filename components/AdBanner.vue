@@ -1,51 +1,84 @@
 <template>
-  <div class="ad-banner" :class="{ 'ad-banner--visible': isVisible }">
+  <div class="ad-banner" :class="[{'ad-banner--visible': isVisible }, {'ad-banner--pizdec': themeStore.isChecked}]">
     <div class="ad-banner__content">
       <!-- <img 
         :src="currentBanner.image" 
         :alt="currentBanner.alt"
         class="ad-banner__image"
       > -->
-      <NuxtImg
-        :src="currentBanner.image" 
-        :alt="currentBanner.alt"
-        class="ad-banner__image"
-        loading="lazy"
-        quality="20"
-        format="webp"
-        width="280"
-        height="212"
-        sizes="100vw sm:50vw md:100vw"
-      />
-      <p class="ad-banner__text">
-        {{ currentBanner.alt }}
-      </p>
-      <button 
-        @click="closeBanner" 
-        class="ad-banner__close"
-        aria-label="Закрыть баннер"
-      >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      >
-        <line x1="18" y1="6" x2="6" y2="18" />
-        <line x1="6" y1="6" x2="18" y2="18" />
-      </svg>
-      </button>
+      <template v-if="themeStore.isChecked">
+        <NuxtImg src="/images/321.jpg" class="ad-banner__image ad-banner__image--prikol"></NuxtImg>
+        <p class="ad-banner__text ad-banner__text--prikol">
+          {{text}}
+        </p>
+        <button 
+          class="ad-banner__close"
+          aria-label="Закрыть баннер"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
+        </button>
+      </template>
+      <template v-else>
+        <NuxtImg
+          :src="currentBanner.image" 
+          :alt="currentBanner.alt"
+          class="ad-banner__image"
+          loading="lazy"
+          quality="20"
+          format="webp"
+          width="280"
+          height="212"
+          sizes="100vw sm:50vw md:100vw"
+        />
+        <p class="ad-banner__text">
+          {{ currentBanner.alt }}
+        </p>
+        <button 
+          @click="closeBanner" 
+          class="ad-banner__close"
+          aria-label="Закрыть баннер"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
+        </button>
+      </template>
     </div>
   </div>
 </template>
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
+
+import { useThemeStore } from '@/stores/theme'
+const themeStore = useThemeStore()
+
+import { useScrambleText } from '@/composables/useScrambleText'
+const text = useScrambleText('ЗДАРОВА КАК ДЕЛА',)
 
 const currentBannerIndex = ref(0)
 
@@ -125,6 +158,24 @@ onUnmounted(() => {
   &--visible {
     right: 20px;
   }
+
+  &--pizdec {
+    border-radius: 10px;
+    transform: translate3d(-10%, -50%, 5em);
+    padding: 3px;
+    mix-blend-mode: hard-light;
+    background: linear-gradient(to right, red, purple);
+    animation: suka 5s ease infinite;
+  }
+
+  @keyframes suka { 
+    0%{transform: translate3d(-50%, -50%, 15em)}
+    20%{transform: translate3d(-10%, -60%, 5em)}
+    40%{transform: translate3d(-80%, 70%, 5em)}
+    60%{transform: translate3d(-20%, -100%, 5em)}
+    80%{transform: translate3d(-50%, -20%, 5em)}
+    100%{transform: translate3d(-90%, -90%, 5em)}
+  }
   
   &__content {
     position: relative;
@@ -146,12 +197,36 @@ onUnmounted(() => {
     font-size: 24px;
     text-align: center;
     font-weight: bold;
+
+    &--prikol {
+      padding: $gutter;
+      font-family: monospace; // ОБЯЗАТЕЛЬНО
+      letter-spacing: 10px;
+    }
   }
   
   &__image {
     width: 100%;
     height: auto;
     display: block;
+
+
+    &--prikol {
+      animation-name: pizdec;
+      animation-duration: 2s;
+      animation-iteration-count: infinite;
+      animation-timing-function: linear;
+      transform: translateX(50px);
+    }
+  }
+
+  @keyframes pizdec {
+    from {
+      transform: rotate(0deg) scale(1) ;
+    }
+    to {
+      transform: rotate(360deg) scale(20);
+    }
   }
   
   // &__close {

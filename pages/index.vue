@@ -2,6 +2,9 @@
   <div>
     <section id="hero" class="section section--hero hero">
       <img src="/images/123.jpg" class="sanya" v-if="themeStore.isChecked" />
+      <audio autoplay loop ref="audioElement">
+        <source src="/fisting.mp3" type="audio/mpeg">
+      </audio>
       <div class="hero__inner">
         <div class="hero__text">
           <p class="hero__eyebrow">Премиальный сервис</p>
@@ -138,9 +141,28 @@ const heroGallery = [
   }
 ]
 
+const audioElement = ref(null)
 
+watch(
+  () => themeStore.isChecked,
+  async (isChecked) => {
+    if (!audioElement.value) return
 
-// const clamp = (value, min = 0, max = 1) => Math.min(max, Math.max(min, value))
+    if (isChecked) {
+      audioElement.value.volume = 1
+
+      try {
+        await audioElement.value.play()
+      } catch (e) {
+        // autoplay был заблокирован — это нормально
+        console.warn('Audio play blocked by browser')
+      }
+    } else {
+      audioElement.value.pause()
+      audioElement.value.currentTime = 0
+    }
+  }
+)
 
 
 onMounted(() => {

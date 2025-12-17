@@ -16,25 +16,29 @@
           <strong>Адрес:</strong> г. Санкт-Петербург, ул. Химиков, 2 ст2 
         </div>
         <div class="contact-item">
-          <strong>Телефон:</strong> +7 (999) 123-LIVE (LIVE RELOAD РАБОТАЕТ!)
+          <strong>Телефон:</strong>
+          <NuxtLink to="tel:+88005553535">8 800 555 35 35</NuxtLink>
         </div>
         <div class="contact-item">
           <NuxtLink to="https://t.me/+79110381838" target="_blank" rel="noopener noreferrer" class="contact-item__tg">
             <img src="/images/telegram-logo_2.svg" />
-            Telegram
+            Telegram бизнеса
           </NuxtLink>
         </div>
-        <div class="contact-item">
-          <NuxtLink to="https://t.me/kenatiprox" target="_blank" rel="noopener noreferrer" class="contact-item__tg">
+        <div class="contact-item" v-if="themeStore.isChecked">
+          <NuxtLink to="https://t.me/kenatiprox?text=%D0%9D%D1%83+%D1%87%D1%91+%D1%82%D0%B0%D0%BC%3F+%D0%9A%D0%BE%D0%B3%D0%B4%D0%B0%2C+%D0%BD%D0%B0%D1%85%D1%83%D0%B9%2C+%D1%81%D0%B0%D0%B9%D1%82+%D1%82%D0%BE+%D0%B3%D0%BE%D1%82%D0%BE%D0%B2+%D0%B1%D1%83%D0%B4%D0%B5%D1%82%3F" target="_blank" rel="noopener noreferrer" class="contact-item__tg">
             <img src="/images/telegram-logo_2.svg" />
-            Telegram
+            Telegram разработчика
           </NuxtLink>
         </div>
         <div class="contact-item">
           <strong>Режим работы:</strong> 10:00 - 20:00 ежедневно
         </div>
-        <div class="contact-item">
-          <strong>Email:</strong> test@live-reload.ru
+        <div class="contact-item" v-if="themeStore.isChecked">
+          <strong>Email:</strong>
+          <NuxtLink to="https://www.instagram.com/reels/DRfoZVxCHIJ/" target="_blank" class="mail-prikol">
+            СТАВИМ РАСКЛАДКУ АНГЛИЙСКУЮ! <span>ПИШЕМ КАПСЛОКОМ SPERMA 228 1488 POZVONI I MY PODBROSIM</span>
+          </NuxtLink>
         </div>
       </div>
     </div>
@@ -49,6 +53,9 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
+
+import { useThemeStore } from '@/stores/theme'
+const themeStore = useThemeStore()
 
 const mapContainer = ref(null)
 
@@ -172,6 +179,34 @@ const initMap = () => {
 </script>
 
 <style lang="scss" scoped>
+.mail-prikol {
+  color: #103610;
+  animation: suka2 2s ease infinite;
+
+  &:hover {
+    span {
+      opacity: 1;
+    }
+  }
+  span {
+    color: #e239c6;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+  }
+}
+
+@keyframes suka2 { 
+  0% {
+    font-size: $font-size;
+  }
+  50% {
+    font-size: $font-size * 1.5;
+  }
+  100% {
+    font-size: $font-size;
+  }
+}
+
 .map-container {
   display: grid;
   grid-template-columns: 2fr 3fr;
