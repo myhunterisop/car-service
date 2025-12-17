@@ -12,37 +12,27 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue';
+// import { onMounted, ref } from 'vue';
+import { ref } from 'vue';
 
 const isChecked = ref(false);
 
-// defineProps = {
-//   isChecked: {
-//     type: Boolean,
-//     default: false,
+// function getTime() {
+//   const date = new Date();
+//   const clientLocalTime = date.toLocaleTimeString();
+
+//   console.log(clientLocalTime)
+
+//   if (clientLocalTime) {
+//     isChecked.value = true
+//   } else {
+//     isChecked.value = false
 //   }
 // }
 
-// defineProps<{
-//   isChecked: boolean
-// }>
-
-function getTime() {
-  const date = new Date();
-  const clientLocalTime = date.toLocaleTimeString();
-
-  console.log(clientLocalTime)
-
-  if (clientLocalTime) {
-    isChecked.value = true
-  } else {
-    isChecked.value = false
-  }
-}
-
-onMounted(() => {
-  getTime();
-});
+// onMounted(() => {
+//   getTime();
+// });
 </script>
 
 <style scoped lang="scss">
