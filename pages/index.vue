@@ -41,7 +41,7 @@
                 </div>
                 <span class="hero-card__index">0{{ index + 1 }}</span>
               </article> -->
-              <video src="/promo-1.mp4" autoplay muted loop class="video"></video>
+              <video src="/promo-1.MP4" autoplay muted loop class="video"></video>
             </div>
           </div>
 
