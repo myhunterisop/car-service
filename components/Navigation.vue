@@ -33,11 +33,15 @@ const data = [
     link: '#hero'
   },
   {
-    name: 'Наши работы',
+    name: 'ТО',
+    link: '#service'
+  },
+  {
+    name: 'Галерея',
     link: '#gallery'
   },
   {
-    name: 'Контакты',
+    name: 'Контакты / Отзывы',
     link: '#contacts'
   }
 ]

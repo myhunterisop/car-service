@@ -55,19 +55,29 @@
           </div>
       </div>
     </section>
+    <Carousel size="70" speed="0.2" />
 
+    <section id="service" class="section section--service">
+      <div class="container">
+        <h2 class="section-title">Техническое обслуживание</h2>
+        <div class="service__inner">
+          <div class="service__item">
+            <h3>Техническое обслуживание</h3>
+          </div>
+        </div>
+      </div>
+    </section>
 
     <section id="gallery" class="section section--gallery">
       <div class="container">
-        <h2 class="section-title">Наши работы</h2>
+        <h2 class="section-title">Галерея</h2>
         <PhotoGallery />
       </div>
-      <Carousel size="70" speed="0.2" />
     </section>
 
     <section id="contacts" class="section section--map">
       <div class="container">
-        <h2 class="section-title">Как нас найти</h2>
+        <h2 class="section-title">Контакты / Отзывы</h2>
         <ClientOnly>
           <YandexMap />
         </ClientOnly>
