@@ -37,6 +37,14 @@ const data = [
     link: '#service'
   },
   {
+    name: 'Диагностика',
+    link: '#diagnostics'
+  },
+  {
+    name: 'Коммерция',
+    link: '#commercial'
+  },
+  {
     name: 'Галерея',
     link: '#gallery'
   },

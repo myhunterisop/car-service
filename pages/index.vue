@@ -3,19 +3,20 @@
     <section id="hero" class="section section--hero hero">
       <img src="/images/123.jpg" class="sanya" v-if="themeStore.isChecked" />
       <audio autoplay loop ref="audioElement">
-        <source src="/fisting.mp3" type="audio/mpeg">
+        <!-- <source src="/fisting.mp3" type="audio/mpeg"> -->
       </audio>
       <div class="hero__inner">
         <div class="hero__text">
           <p class="hero__eyebrow">Премиальный сервис</p>
           <h1>
-            Drag &amp; Drive
+            Ремонт немецких автомобилей
             <span>технологичный автосервис</span>
           </h1>
           <p class="hero__lead">
             Сочетаем точную диагностику, инженерный подход и визуальный контроль за работами.
             Перетащи карточки, чтобы увидеть наши компетенции.
           </p>
+          <p class="hero__lead">НЕ ЗАБЫТЬ! премиальный сервис это не дорого это качественно</p>
           <div class="hero__cta">
             <a href="#contacts" class="hero__button">Записаться</a>
           </div>
@@ -27,7 +28,7 @@
         >
           <div class="hero-drag__track" ref="dragTrack">
             <div class="hero-drag__slides">
-              <article
+              <!-- <article
                 v-for="(card, index) in heroGallery"
                 :key="card.id"
                 class="hero-card"
@@ -39,7 +40,8 @@
                   <span>{{ card.meta }}</span>
                 </div>
                 <span class="hero-card__index">0{{ index + 1 }}</span>
-              </article>
+              </article> -->
+              <video src="/promo-1.mp4" autoplay muted loop class="video"></video>
             </div>
           </div>
 
@@ -55,7 +57,9 @@
           </div>
       </div>
     </section>
+    <!-- <Carousel size="70" speed="0.2" /> -->
     <Carousel size="70" speed="0.2" />
+    
 
     <section id="service" class="section section--service">
       <div class="container">
@@ -63,6 +67,28 @@
         <div class="service__inner">
           <div class="service__item">
             <h3>Техническое обслуживание</h3>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="diagnostics" class="section section--diagnostics">
+      <div class="container">
+        <h2 class="section-title">Диагностика</h2>
+        <div class="service__inner">
+          <div class="service__item">
+            <h3>Диагностика</h3>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="commercial" class="section section--commercial">
+      <div class="container">
+        <h2 class="section-title">Ремонт коммерческого транспорта</h2>
+        <div class="service__inner">
+          <div class="service__item">
+            <h3>Ремонт коммерческого транспорта</h3>
           </div>
         </div>
       </div>
@@ -563,6 +589,10 @@ useHead({
   left: 50%;
   transform: translateY(-100%);
   font-size: clamp(48px, 5.5vw, 129px);
+}
+
+.video {
+  height: 400px;
 }
 
 .pointer {

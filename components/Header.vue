@@ -4,7 +4,7 @@
     { 'header--is-scrolled': isScrolled }
   ]">
     <div class="header__content container">
-      <h1 class="logo">АвтоСервис</h1>
+      <h1 class="logo">АвтоСервис Я сломалась</h1>
       <Navigation class="header__navigation"/>
       <ThemeSwitcher class="header__theme-switcher" v-model="themeStore.isChecked" />
     </div>

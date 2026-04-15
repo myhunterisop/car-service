@@ -30,7 +30,6 @@
             :src="`/images/car-logo/${l}`"
             :alt="l.slice(0, -4)"
             loading="lazy"
-            width="70"
             height="70"
           />
         </div>
@@ -106,20 +105,15 @@ const logos = [
   "mercedes.svg",
   "volkswagen.svg",
   "ford.svg",
-  "nissan.svg",
-  "honda.svg",
-  "hyundai.svg",
-  "mazda.svg",
-  "volvo.svg",
-  "lada.svg",
-  "kia.svg",
   "skoda.svg",
   "opel.svg",
-  "chevrolet.svg",
-  "suzuki.svg",
-  "renault.svg",
-  "mitsubishi.svg",
-]
+  "land-rover.svg",
+  "jaguar.svg",
+  "gac.svg",
+  "tank.svg",
+  "smart.svg",
+  "mini.svg"
+  ]
 
 function signDir() { return props.direction === 'left' ? -1 : 1; }
 
@@ -299,7 +293,7 @@ onUnmounted(() => {
     // }
 
     img {
-      width: 70px;
+      // width: 70px;
       height: 70px;
       display: block;
       user-select: none;
